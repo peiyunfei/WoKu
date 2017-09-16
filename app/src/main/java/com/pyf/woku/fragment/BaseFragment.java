@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * fragment基类
  * <br/>
@@ -18,6 +21,7 @@ import android.view.ViewGroup;
 public abstract class BaseFragment extends Fragment {
 
     protected Context mContext;
+    private Unbinder mUnBinder;
 
     @Override
     public void onAttach(Context context) {
@@ -28,25 +32,44 @@ public abstract class BaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return initView();
+        View rootView = null;
+        if (setLayout() instanceof Integer) {
+            rootView = inflater.inflate((Integer) setLayout(), container, false);
+        } else if (setLayout() instanceof View) {
+            rootView = (View) setLayout();
+        }
+        if (rootView != null) {
+            // 注入
+            mUnBinder = ButterKnife.bind(this, rootView);
+            // 绑定
+            onBindView(savedInstanceState, rootView);
+        }
+        return rootView;
     }
+
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        initData();
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mUnBinder != null) {
+            // 解绑
+            mUnBinder.unbind();
+        }
     }
 
     /**
-     * 初始化数据
+     * 绑定视图，子类必须实现
+     *
+     * @param savedInstanceState
+     *         用于保存fragment的状态
+     * @param rootView
+     *         根布局
      */
-    private void initData() {
-
-    }
+    protected abstract void onBindView(Bundle savedInstanceState, View rootView);
 
     /**
-     * 初始化控件
+     * 初始化页面布局
      */
-    protected abstract View initView();
+    protected abstract Object setLayout();
 
 }

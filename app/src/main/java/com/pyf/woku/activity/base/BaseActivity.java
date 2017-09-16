@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * activity基类
  * <br/>
@@ -15,21 +18,24 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     // 打日志的标记
     public String TAG;
+    private Unbinder mUnBinder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TAG = getComponentName().getShortClassName();
-        initView();
+        setContentView(initView());
+        mUnBinder = ButterKnife.bind(this);
         initData();
-        initEvent();
     }
 
-    /**
-     * 初始化事件
-     */
-    private void initEvent() {
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mUnBinder != null) {
+            // 解绑
+            mUnBinder.unbind();
+        }
     }
 
     /**
@@ -41,6 +47,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 初始化控件
      */
-    protected abstract void initView();
+    protected abstract int initView();
 
 }
