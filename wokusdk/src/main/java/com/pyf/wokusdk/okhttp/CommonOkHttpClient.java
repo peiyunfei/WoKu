@@ -1,6 +1,7 @@
 package com.pyf.wokusdk.okhttp;
 
 import com.pyf.wokusdk.okhttp.https.HttpsUtils;
+import com.pyf.wokusdk.okhttp.response.CommonJsonCallback;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,6 +13,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 /**
+ * 封装OkHttpClient对象
  * <br/>
  * 作者：裴云飞
  * <br/>
@@ -28,9 +30,9 @@ public class CommonOkHttpClient {
      * @param request
      *         get请求
      */
-    public static Call get(Request request) {
+    public static Call get(Request request, CommonJsonCallback callback) {
         Call call = OkHttpClientHolder.OKHTTP_CLIENT.newCall(request);
-//        call.enqueue();
+        call.enqueue(callback);
         return call;
     }
 
@@ -40,12 +42,15 @@ public class CommonOkHttpClient {
      * @param request
      *         post请求
      */
-    public static Call post(Request request) {
+    public static Call post(Request request, CommonJsonCallback callback) {
         Call call = OkHttpClientHolder.OKHTTP_CLIENT.newCall(request);
-//        call.enqueue();
+        call.enqueue(callback);
         return call;
     }
 
+    /**
+     * 创建OkHttpClient实例
+     */
     private static final class OkHttpClientHolder {
 
         private static final OkHttpClient.Builder BUILDER = new OkHttpClient.Builder();
