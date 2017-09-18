@@ -5,5 +5,7 @@
 /.idea/libraries
 .DS_Store
 /build
+/video
+/vuandroidadsdk
 /captures
 .externalNativeBuild

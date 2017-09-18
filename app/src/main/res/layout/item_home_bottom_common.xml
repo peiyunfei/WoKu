@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+    <TextView
+        android:id="@+id/tv_home_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:text="还在手动写繁锁的页面吗？GRUT让你脱离苦海."
+        android:textColor="@color/color_333333"
+        android:textSize="18sp"/>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/tv_home_text"
+        android:layout_marginBottom="15dp"
+        android:background="@color/color_d0d0d0"/>
+
+    <TextView
+        android:id="@+id/tv_home_from"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view"
+        android:text="来自北京|新中关"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/tv_home_zan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/view"
+        android:text="点赞"
+        android:textColor="@color/color_bfbfbf"
+        android:textSize="18sp"/>
+</RelativeLayout>

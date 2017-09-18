@@ -1,6 +1,7 @@
 package com.pyf.wokusdk.okhttp;
 
 import com.pyf.wokusdk.okhttp.https.HttpsUtils;
+import com.pyf.wokusdk.okhttp.listener.DisposeDataHandle;
 import com.pyf.wokusdk.okhttp.response.CommonJsonCallback;
 
 import java.util.concurrent.TimeUnit;
@@ -25,26 +26,14 @@ public class CommonOkHttpClient {
     private static final int TIME_OUT = 30;
 
     /**
-     * 发送get请求
+     * 发送请求
      *
      * @param request
      *         get请求
      */
-    public static Call get(Request request, CommonJsonCallback callback) {
+    public static Call request(Request request, DisposeDataHandle handle) {
         Call call = OkHttpClientHolder.OKHTTP_CLIENT.newCall(request);
-        call.enqueue(callback);
-        return call;
-    }
-
-    /**
-     * 发送post请求
-     *
-     * @param request
-     *         post请求
-     */
-    public static Call post(Request request, CommonJsonCallback callback) {
-        Call call = OkHttpClientHolder.OKHTTP_CLIENT.newCall(request);
-        call.enqueue(callback);
+        call.enqueue(new CommonJsonCallback(handle));
         return call;
     }
 

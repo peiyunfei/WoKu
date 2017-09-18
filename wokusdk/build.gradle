@@ -28,6 +28,22 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
+    // okhttp
     compile 'com.squareup.okhttp3:okhttp:3.0.1'
+    // universalimageloader
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    // 圆形头像
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+    compile('cn.trinea.android.view.autoscrollviewpager:android-auto-scroll-view-pager:1.1.2') {
+        exclude module: 'support-v4'
+    }
+    // 友盟统计
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    // 滑动关闭Activity库
+    compile 'com.r0adkll:slidableactivity:2.0.5'
+    // 阿里热修复andfix
+    compile 'com.alipay.euler:andfix:0.5.0@aar'
+    // 日志库logger
+    compile 'com.orhanobut:logger:+'
 }

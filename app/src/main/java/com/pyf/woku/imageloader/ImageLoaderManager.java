@@ -15,7 +15,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.pyf.wokusdk.R;
+import com.pyf.woku.R;
 
 /**
  * 图片请求框架的封装
@@ -111,7 +111,7 @@ public class ImageLoaderManager {
                 DisplayImageOptions.Builder()
                 // url为空时加载的图片
                 .showImageForEmptyUri(R.drawable.default_user_avatar)
-                // 加载时显示的图片
+                // 加载失败显示的图片
                 .showImageOnFail(R.drawable.default_user_avatar)
                 // 设置下载的图片是否缓存在内存中, 重要，否则图片不会缓存到内存中
                 .cacheInMemory(true)

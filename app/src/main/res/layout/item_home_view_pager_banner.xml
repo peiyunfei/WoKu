@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@android:color/white"
+              android:orientation="vertical"
+              android:padding="8dp">
+
+    <TextView
+        android:id="@+id/tv_home_banner_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="7天搞定Node.js微信公众号"/>
+
+    <TextView
+        android:id="@+id/tv_home_banner_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="当前价格:128.00"/>
+
+    <TextView
+        android:id="@+id/tv_home_banner_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:drawableLeft="@drawable/icon_gonggao"
+        android:drawablePadding="8dp"
+        android:text="【专治各种疑问】什么是收费课?"/>
+
+    <TextView
+        android:id="@+id/tv_home_banner_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="842人在学"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_home_banner_one"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="fitXY"/>
+
+        <View
+            android:layout_width="6dp"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/iv_home_banner_two"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="fitXY"/>
+
+        <View
+            android:layout_width="6dp"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            android:id="@+id/iv_home_banner_three"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="fitXY"/>
+    </LinearLayout>
+</LinearLayout>

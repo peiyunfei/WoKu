@@ -23,7 +23,7 @@ public class CommonRequest {
      *         请求参数
      * @return 返回get请求对象
      */
-    public Request createGetRequest(String url, RequestParams params) {
+    public static Request createGetRequest(String url, RequestParams params) {
         StringBuilder sb = new StringBuilder(url).append("?");
         if (params != null) {
             for (Map.Entry<String, String> entry : params.urlParams.entrySet()) {
@@ -42,7 +42,7 @@ public class CommonRequest {
      *         请求参数
      * @return 返回get请求对象
      */
-    public Request createPostRequest(String url, RequestParams params) {
+    public static Request createPostRequest(String url, RequestParams params) {
         FormBody.Builder builder = new FormBody.Builder();
         if (params != null) {
             for (Map.Entry<String, String> entry : params.urlParams.entrySet()) {
