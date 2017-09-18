@@ -25,4 +25,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.7.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
     compile project(':wokusdk')
+    compile files('libs/zxing.jar')
 }

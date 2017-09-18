@@ -1,15 +1,19 @@
 package com.pyf.woku.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * fragment基类
@@ -19,6 +23,8 @@ import butterknife.Unbinder;
  * 时间：2017/9/16
  */
 public abstract class BaseFragment extends Fragment {
+
+    protected static final int REQUEST_QRCODE = 0x01;
 
     protected Context mContext;
     private Unbinder mUnBinder;
@@ -47,6 +53,18 @@ public abstract class BaseFragment extends Fragment {
         return rootView;
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_QRCODE:
+                if (resultCode == RESULT_OK) {
+                    String scanResult = data.getStringExtra("SCAN_RESULT");
+                    Toast.makeText(mContext, scanResult, Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
 
     @Override
     public void onDestroyView() {

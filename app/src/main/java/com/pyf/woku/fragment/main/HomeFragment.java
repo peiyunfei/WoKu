@@ -1,5 +1,6 @@
 package com.pyf.woku.fragment.main;
 
+import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.pyf.woku.bean.Home;
 import com.pyf.woku.fragment.BaseFragment;
 import com.pyf.woku.network.http.HttpConstants;
 import com.pyf.woku.view.HomeHeaderLayout;
+import com.pyf.woku.zxing.app.CaptureActivity;
 import com.pyf.wokusdk.okhttp.CommonOkHttpClient;
 import com.pyf.wokusdk.okhttp.listener.DisposeDataHandle;
 import com.pyf.wokusdk.okhttp.listener.DisposeDataListener;
@@ -22,6 +24,7 @@ import com.pyf.wokusdk.okhttp.request.CommonRequest;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import okhttp3.Request;
 
 /**
@@ -33,8 +36,6 @@ import okhttp3.Request;
  */
 public class HomeFragment extends BaseFragment {
 
-    @BindView(R2.id.image_home_scan)
-    TextView mImageHomeScan;
     @BindView(R2.id.tv_home_search)
     TextView mTvHomeSearch;
     @BindView(R2.id.image_home_category)
@@ -46,6 +47,15 @@ public class HomeFragment extends BaseFragment {
 
     private Home mHome;
     private HomeAdapter mAdapter;
+
+    /**
+     * 跳转到扫码界面
+     */
+    @OnClick(R2.id.image_home_scan)
+    void onClick() {
+        Intent intent = new Intent(mContext, CaptureActivity.class);
+        startActivityForResult(intent, REQUEST_QRCODE);
+    }
 
     @Override
     protected void onBindView(Bundle savedInstanceState, View rootView) {
