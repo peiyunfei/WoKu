@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Woku.iml" filepath="$PROJECT_DIR$/Woku.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/video/video.iml" filepath="$PROJECT_DIR$/video/video.iml" />
       <module fileurl="file://$PROJECT_DIR$/vuandroidadsdk/vuandroidadsdk.iml" filepath="$PROJECT_DIR$/vuandroidadsdk/vuandroidadsdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/wokusdk/wokusdk.iml" filepath="$PROJECT_DIR$/wokusdk/wokusdk.iml" />
     </modules>

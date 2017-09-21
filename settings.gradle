@@ -1,1 +1,1 @@
-include ':app', ':wokusdk'
+include ':app', ':wokusdk', ':video', ':vuandroidadsdk'

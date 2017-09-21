@@ -1,14 +1,21 @@
 package com.pyf.wokusdk.util;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.pyf.wokusdk.constant.SDKConstant;
 
 import java.io.ByteArrayInputStream;
 
@@ -24,6 +31,9 @@ public class Utils {
         return (int) (pxValue / scale);
     }
 
+    /**
+     * 获取控件可见的比例
+     */
     public static int getVisiblePercent(View pView) {
         if (pView != null && pView.isShown()) {
             DisplayMetrics displayMetrics = pView.getContext().getResources().getDisplayMetrics();
@@ -41,71 +51,72 @@ public class Utils {
         return -1;
     }
 
-    //is wifi connected
-//    public static boolean isWifiConnected(Context context) {
-//        if (context.checkCallingOrSelfPermission(permission.ACCESS_WIFI_STATE)
-//            != PackageManager.PERMISSION_GRANTED) {
-//            return false;
-//        }
-//        ConnectivityManager connectivityManager = (ConnectivityManager)
-//            context.getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
-//        if (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_WIFI) {
-//            return true;
-//        }
-//        return false;
-//    }
+    /**
+     * 是否连接wifi
+     */
+    public static boolean isWifiConnected(Context context) {
+        if (context.checkCallingOrSelfPermission(Manifest.permission.ACCESS_WIFI_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+        if (info != null && info.isConnected() && info.getType() == ConnectivityManager.TYPE_WIFI) {
+            return true;
+        }
+        return false;
+    }
 
-    //decide can autoplay the ad
-//    public static boolean canAutoPlay(Context context, AutoPlaySetting setting) {
-//        boolean result = true;
-//        switch (setting) {
-//            case AUTO_PLAY_3G_4G_WIFI:
-//                result = true;
-//                break;
-//            case AUTO_PLAY_ONLY_WIFI:
-//                if (isWifiConnected(context)) {
-//                    result = true;
-//                } else {
-//                    result = false;
-//                }
-//                break;
-//            case AUTO_PLAY_NEVER:
-//                result = false;
-//                break;
-//        }
-//        return result;
-//    }
-//
-//    public static String getAppVersion(Context context) {
-//        String version = "1.0.0"; //默认1.0.0版本
-//        PackageManager manager = context.getPackageManager();
-//        try {
-//            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
-//            version = info.versionName;
-//        } catch (Exception e) {
-//        }
-//
-//        return version;
-//    }
+    /**
+     * 是否能自动播放
+     */
+    public static boolean canAutoPlay(Context context, SDKConstant.AutoPlaySetting setting) {
+        boolean result = true;
+        switch (setting) {
+            case AUTO_PLAY_3G_4G_WIFI:
+                result = true;
+                break;
+            case AUTO_PLAY_ONLY_WIFI:
+                if (isWifiConnected(context)) {
+                    result = true;
+                } else {
+                    result = false;
+                }
+                break;
+            case AUTO_PLAY_NEVER:
+                result = false;
+                break;
+        }
+        return result;
+    }
+
+    //
+    public static String getAppVersion(Context context) {
+        String version = "1.0.0"; //默认1.0.0版本
+        PackageManager manager = context.getPackageManager();
+        try {
+            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+            version = info.versionName;
+        } catch (Exception e) {
+        }
+
+        return version;
+    }
 
     /**
      * 将数组中的所有素材IE拼接起来，空则拼接“”
-     *
-     * @param
-     * @return
      */
-//    public static String getAdIE(ArrayList<AdValue> values) {
-//        StringBuilder result = new StringBuilder();
-//        if (values != null && values.size() > 0) {
-//            for (AdValue value : values) {
-//                result.append(value.adid.equals("") ? "" : value.adid).append(",");
-//            }
-//            return result.substring(0, result.length() - 1);
-//        }
-//        return "";
-//    }
-
+    //    public static String getAdIE(ArrayList<AdValue> values) {
+    //        StringBuilder result = new StringBuilder();
+    //        if (values != null && values.size() > 0) {
+    //            for (AdValue value : values) {
+    //                result.append(value.adid.equals("") ? "" : value.adid).append(",");
+    //            }
+    //            return result.substring(0, result.length() - 1);
+    //        }
+    //        return "";
+    //    }
     public static DisplayMetrics getDisplayMetrics(Context context) {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -114,6 +125,11 @@ public class Utils {
         }
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics;
+    }
+
+    public static int getScreenWidth(Context context) {
+        DisplayMetrics metrics = getDisplayMetrics(context);
+        return metrics.widthPixels;
     }
 
     public static BitmapDrawable decodeImage(String base64drawable) {
@@ -127,8 +143,8 @@ public class Utils {
         if (canTelephone(context)) {
             //能打电话可能是手机也可能是平板
             return (context.getResources().getConfiguration().
-                screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK)
-                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+                    screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK)
+                    >= Configuration.SCREENLAYOUT_SIZE_LARGE;
         } else {
             return true; //不能打电话一定是平板
         }
@@ -136,7 +152,7 @@ public class Utils {
 
     private static boolean canTelephone(Context context) {
         TelephonyManager telephony = (TelephonyManager)
-            context.getSystemService(Context.TELEPHONY_SERVICE);
+                context.getSystemService(Context.TELEPHONY_SERVICE);
         return (telephony.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE) ? false : true;
     }
 
