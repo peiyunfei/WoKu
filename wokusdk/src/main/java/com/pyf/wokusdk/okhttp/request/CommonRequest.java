@@ -3,6 +3,7 @@ package com.pyf.wokusdk.okhttp.request;
 import java.util.Map;
 
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.Request;
 
 /**
@@ -24,13 +25,32 @@ public class CommonRequest {
      * @return 返回get请求对象
      */
     public static Request createGetRequest(String url, RequestParams params) {
-        StringBuilder sb = new StringBuilder(url).append("?");
+        return createGetRequest(url, params, null);
+    }
+
+    /**
+     * 可以带请求头的Get请求
+     */
+    public static Request createGetRequest(String url, RequestParams params, RequestParams headers) {
+        StringBuilder urlBuilder = new StringBuilder(url).append("?");
         if (params != null) {
             for (Map.Entry<String, String> entry : params.urlParams.entrySet()) {
-                sb.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+                urlBuilder.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
             }
         }
-        return new Request.Builder().url(sb.substring(0, sb.length() - 1)).build();
+        //添加请求头
+        Headers.Builder mHeaderBuild = new Headers.Builder();
+        if (headers != null) {
+            for (Map.Entry<String, String> entry : headers.urlParams.entrySet()) {
+                mHeaderBuild.add(entry.getKey(), entry.getValue());
+            }
+        }
+        Headers mHeader = mHeaderBuild.build();
+        return new Request.Builder().
+                url(urlBuilder.substring(0, urlBuilder.length() - 1))
+                .get()
+                .headers(mHeader)
+                .build();
     }
 
     /**
@@ -43,13 +63,50 @@ public class CommonRequest {
      * @return 返回get请求对象
      */
     public static Request createPostRequest(String url, RequestParams params) {
-        FormBody.Builder builder = new FormBody.Builder();
+        return createPostRequest(url, params, null);
+    }
+
+    /**可以带请求头的Post请求
+     * @param url
+     * @param params
+     * @param headers
+     * @return
+     */
+    public static Request createPostRequest(String url, RequestParams params, RequestParams headers) {
+        FormBody.Builder mFormBodyBuild = new FormBody.Builder();
         if (params != null) {
             for (Map.Entry<String, String> entry : params.urlParams.entrySet()) {
-                builder.add(entry.getKey(), entry.getValue());
+                mFormBodyBuild.add(entry.getKey(), entry.getValue());
             }
         }
-        FormBody body = builder.build();
-        return new Request.Builder().url(url).post(body).build();
+        //添加请求头
+        Headers.Builder mHeaderBuild = new Headers.Builder();
+        if (headers != null) {
+            for (Map.Entry<String, String> entry : headers.urlParams.entrySet()) {
+                mHeaderBuild.add(entry.getKey(), entry.getValue());
+            }
+        }
+        FormBody mFormBody = mFormBodyBuild.build();
+        Headers mHeader = mHeaderBuild.build();
+        Request request = new Request.Builder().url(url).
+                post(mFormBody).
+                headers(mHeader)
+                .build();
+        return request;
+    }
+
+    /**
+     * @param url
+     * @param params
+     * @return
+     */
+    public static Request createMonitorRequest(String url, RequestParams params) {
+        StringBuilder urlBuilder = new StringBuilder(url).append("&");
+        if (params != null && params.hasParams()) {
+            for (Map.Entry<String, String> entry : params.urlParams.entrySet()) {
+                urlBuilder.append(entry.getKey()).append("=").append(entry.getValue()).append("&");
+            }
+        }
+        return new Request.Builder().url(urlBuilder.substring(0, urlBuilder.length() - 1)).get().build();
     }
 }

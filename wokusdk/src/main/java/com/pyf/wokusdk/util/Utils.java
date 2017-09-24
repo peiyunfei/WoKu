@@ -32,7 +32,7 @@ public class Utils {
     }
 
     /**
-     * 获取控件可见的比例
+     * 获取控件在屏幕中可见的比例
      */
     public static int getVisiblePercent(View pView) {
         if (pView != null && pView.isShown()) {
@@ -107,10 +107,10 @@ public class Utils {
     /**
      * 将数组中的所有素材IE拼接起来，空则拼接“”
      */
-    //    public static String getAdIE(ArrayList<AdValue> values) {
+    //    public static String getAdIE(ArrayList<VideoValue> values) {
     //        StringBuilder result = new StringBuilder();
     //        if (values != null && values.size() > 0) {
-    //            for (AdValue value : values) {
+    //            for (VideoValue value : values) {
     //                result.append(value.adid.equals("") ? "" : value.adid).append(",");
     //            }
     //            return result.substring(0, result.length() - 1);

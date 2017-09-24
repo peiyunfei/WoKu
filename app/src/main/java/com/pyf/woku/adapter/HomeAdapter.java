@@ -7,12 +7,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.pyf.woku.R;
 import com.pyf.woku.bean.Home;
 import com.pyf.woku.imageloader.ImageLoaderManager;
 import com.pyf.woku.util.Util;
+import com.pyf.wokusdk.core.video.VideoContext;
 import com.pyf.wokusdk.util.Utils;
 
 import java.util.List;
@@ -41,6 +44,7 @@ public class HomeAdapter extends BaseAdapter {
     private Context mContext;
     private List<Home.DataBean.ListBean> list;
     private ImageLoaderManager mImageLoader;
+    private VideoContext mVideoContext;
 
     public HomeAdapter(Context context, List<Home.DataBean.ListBean> list) {
         mContext = context;
@@ -76,18 +80,18 @@ public class HomeAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         int type = getItemViewType(position);
+        Home.DataBean.ListBean listBean = list.get(position);
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
             // 初始化不同类型的布局文件
-            convertView = initView(convertView, type, holder);
+            convertView = initView(convertView, type, holder, listBean);
             // 初始化不同类型相同的布局文件
             convertView = initCommonView(convertView, type, holder);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        Home.DataBean.ListBean listBean = list.get(position);
         bindData(type, holder, listBean);
         return convertView;
     }
@@ -107,6 +111,7 @@ public class HomeAdapter extends BaseAdapter {
                 }
                 break;
             case VIDEO_TYPE:
+                bindData(holder, listBean);
                 break;
             case BANNER_TYPE:
                 // 设置轮播图特有的属性
@@ -146,6 +151,7 @@ public class HomeAdapter extends BaseAdapter {
         switch (type) {
             case SINGLE_TYPE: // 单图
             case MULTIPART_TYPE: // 多图
+            case VIDEO_TYPE: // 视频
                 holder.mCivHomeLogo = (CircleImageView) convertView.findViewById(R.id.civ_home_logo);
                 holder.mTvHomeFrom = (TextView) convertView.findViewById(R.id.tv_home_from);
                 holder.mTvHomeTitle = (TextView) convertView.findViewById(R.id.tv_home_title);
@@ -159,7 +165,8 @@ public class HomeAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private View initView(View convertView, int type, ViewHolder holder) {
+    private View initView(View convertView, int type,
+                          ViewHolder holder, Home.DataBean.ListBean listBean) {
         switch (type) {
             case SINGLE_TYPE: // 单图
                 convertView = View.inflate(mContext, R.layout.item_home_single, null);
@@ -171,6 +178,9 @@ public class HomeAdapter extends BaseAdapter {
                 break;
             case VIDEO_TYPE: // 视频
                 convertView = View.inflate(mContext, R.layout.item_home_video, null);
+                holder.mRlVideoLayout = (RelativeLayout) convertView.findViewById(R.id.rl_video_layout);
+                mVideoContext = new VideoContext(holder.mRlVideoLayout,
+                        new Gson().toJson(listBean), null);
                 break;
             case BANNER_TYPE: // 轮播图
                 convertView = View.inflate(mContext, R.layout.item_home_banner, null);
@@ -178,6 +188,12 @@ public class HomeAdapter extends BaseAdapter {
                 break;
         }
         return convertView;
+    }
+
+    public void updateAdInScrollView() {
+        if (mVideoContext != null) {
+            mVideoContext.updateAdInScrollView();
+        }
     }
 
     static class ViewHolder {
@@ -197,5 +213,8 @@ public class HomeAdapter extends BaseAdapter {
 
         // 轮播图
         private ViewPager mVpHomeBanner;
+
+        // 视频
+        private RelativeLayout mRlVideoLayout;
     }
 }

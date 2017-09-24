@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -88,6 +89,17 @@ public class HomeFragment extends BaseFragment {
             mLvHome.addHeaderView(new HomeHeaderLayout(mContext, head));
             mAdapter = new HomeAdapter(mContext, list);
             mLvHome.setAdapter(mAdapter);
+            mLvHome.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                }
+
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                    mAdapter.updateAdInScrollView();
+                }
+            });
         } else {
             showErrorView();
         }

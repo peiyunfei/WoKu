@@ -1,4 +1,4 @@
-package com.pyf.wokusdk.util;
+package com.pyf.wokusdk.core;
 
 import com.pyf.wokusdk.constant.SDKConstant;
 

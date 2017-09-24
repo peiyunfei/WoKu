@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="@android:color/white"
+              android:orientation="vertical"
+              android:padding="8dp">
 
+    <include layout="@layout/item_home_logo_common"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_video_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <include layout="@layout/item_home_bottom_common"/>
 </LinearLayout>
