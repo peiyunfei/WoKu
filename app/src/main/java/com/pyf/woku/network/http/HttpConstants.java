@@ -10,6 +10,7 @@ public class HttpConstants {
 
     private static final String ROOT_URL = "http://192.168.1.228:8080/server";
     public static final String HOME = ROOT_URL + "/home_data.json";
+    public static final String UPDATE = ROOT_URL + "/update.json";
     /**
      * 请求本地产品列表
      */

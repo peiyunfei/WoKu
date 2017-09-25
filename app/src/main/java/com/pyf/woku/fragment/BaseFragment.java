@@ -2,13 +2,26 @@ package com.pyf.woku.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.pyf.woku.R;
+import com.pyf.woku.bean.Update;
+import com.pyf.woku.constant.Constant;
+import com.pyf.woku.network.http.RequestCenter;
+import com.pyf.woku.service.update.UpdateService;
+import com.pyf.woku.util.Util;
+import com.pyf.woku.view.CommonDialog;
+import com.pyf.wokusdk.okhttp.listener.DisposeDataListener;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -73,6 +86,116 @@ public abstract class BaseFragment extends Fragment {
             // 解绑
             mUnBinder.unbind();
         }
+    }
+
+    /**
+     * 版本更新
+     */
+    protected void checkVersion() {
+        RequestCenter.checkVersion(new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                Update update = (Update) responseObj;
+                if (Util.getVersionCode(mContext) < update.data.currentVersion) {
+                    final CommonDialog dialog = new CommonDialog(mContext,
+                            getString(R.string.update_new_version),
+                            getString(R.string.update_title),
+                            getString(R.string.update_install),
+                            getString(R.string.cancel));
+                    dialog.show();
+                    dialog.setConfirmClickListener(new CommonDialog.DialogConfirmClickListener() {
+                        @Override
+                        public void onConfirmClick() {
+                            if(dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                            Intent intent = new Intent(mContext, UpdateService.class);
+                            mContext.startService(intent);
+                        }
+                    });
+                    dialog.setCancelClickListener(new CommonDialog.DialogCancelClickListener() {
+                        @Override
+                        public void onCancelClick() {
+                            if(dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                } else {
+                    final CommonDialog dialog = new CommonDialog(mContext,
+                            getString(R.string.no_new_version_title),
+                            getString(R.string.no_new_version_msg),
+                            getString(R.string.confirm));
+                    dialog.show();
+                    dialog.setConfirmClickListener(new CommonDialog.DialogConfirmClickListener() {
+                        @Override
+                        public void onConfirmClick() {
+                            if(dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Object reasonObj) {
+                Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * 申请指定权限
+     *
+     * @param requestCode
+     *         结果码
+     * @param permissions
+     *         指定权限
+     */
+    protected void requestPermissions(int requestCode, String... permissions) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            requestPermissions(permissions, requestCode);
+        }
+    }
+
+    /**
+     * 判断是否有指定的权限
+     *
+     * @param permissions
+     *         指定的权限
+     * @return true 有指定的权限，false 没有指定的权限
+     */
+    protected boolean hasPermission(String... permissions) {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(mContext, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case Constant.HARDWEAR_CAMERA_CODE:
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openCamera();
+                }
+                break;
+            case Constant.WRITE_READ_EXTERNAL_CODE:
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    checkVersion();
+                }
+                break;
+        }
+    }
+
+    protected void openCamera() {
     }
 
     /**

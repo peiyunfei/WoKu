@@ -2,6 +2,7 @@ package com.pyf.wokusdk.okhttp;
 
 import com.pyf.wokusdk.okhttp.https.HttpsUtils;
 import com.pyf.wokusdk.okhttp.listener.DisposeDataHandle;
+import com.pyf.wokusdk.okhttp.response.CommonFileCallback;
 import com.pyf.wokusdk.okhttp.response.CommonJsonCallback;
 
 import java.util.concurrent.TimeUnit;
@@ -34,6 +35,12 @@ public class CommonOkHttpClient {
     public static Call request(Request request, DisposeDataHandle handle) {
         Call call = OkHttpClientHolder.OKHTTP_CLIENT.newCall(request);
         call.enqueue(new CommonJsonCallback(handle));
+        return call;
+    }
+
+    public static Call downloadFile(Request request, DisposeDataHandle handle) {
+        Call call = OkHttpClientHolder.OKHTTP_CLIENT.newCall(request);
+        call.enqueue(new CommonFileCallback(handle));
         return call;
     }
 

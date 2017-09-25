@@ -31,6 +31,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".zxing.app.CaptureActivity"/>
+        <activity android:name=".activity.SettingActivity"/>
+
+        <service android:name=".service.update.UpdateService"/>
     </application>
 
 </manifest>
