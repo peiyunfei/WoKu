@@ -5,14 +5,17 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.pyf.woku.R;
 import com.pyf.woku.R2;
+import com.pyf.woku.activity.PhotoViewActivity;
 import com.pyf.woku.adapter.HomeAdapter;
 import com.pyf.woku.bean.Home;
+import com.pyf.woku.constant.Constant;
 import com.pyf.woku.fragment.BaseFragment;
 import com.pyf.woku.network.http.HttpConstants;
 import com.pyf.woku.view.HomeHeaderLayout;
@@ -22,6 +25,7 @@ import com.pyf.wokusdk.okhttp.listener.DisposeDataHandle;
 import com.pyf.wokusdk.okhttp.listener.DisposeDataListener;
 import com.pyf.wokusdk.okhttp.request.CommonRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,7 +39,7 @@ import okhttp3.Request;
  * <br/>
  * 时间：2017/9/16
  */
-public class HomeFragment extends BaseFragment {
+public class HomeFragment extends BaseFragment implements AbsListView.OnItemClickListener {
 
     @BindView(R2.id.tv_home_search)
     TextView mTvHomeSearch;
@@ -54,6 +58,19 @@ public class HomeFragment extends BaseFragment {
      */
     @OnClick(R2.id.image_home_scan)
     void onClick() {
+        if (hasPermission(Constant.HARDWEAR_CAMERA_PERMISSION)) {
+            toCaltureActivity();
+        } else {
+            requestPermissions(Constant.HARDWEAR_CAMERA_CODE, Constant.HARDWEAR_CAMERA_PERMISSION);
+        }
+    }
+
+    @Override
+    protected void openCamera() {
+        toCaltureActivity();
+    }
+
+    private void toCaltureActivity() {
         Intent intent = new Intent(mContext, CaptureActivity.class);
         startActivityForResult(intent, REQUEST_QRCODE);
     }
@@ -89,6 +106,7 @@ public class HomeFragment extends BaseFragment {
             mLvHome.addHeaderView(new HomeHeaderLayout(mContext, head));
             mAdapter = new HomeAdapter(mContext, list);
             mLvHome.setAdapter(mAdapter);
+            mLvHome.setOnItemClickListener(this);
             mLvHome.setOnScrollListener(new AbsListView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -96,7 +114,8 @@ public class HomeFragment extends BaseFragment {
                 }
 
                 @Override
-                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                public void onScroll(AbsListView view, int firstVisibleItem,
+                                     int visibleItemCount, int totalItemCount) {
                     mAdapter.updateAdInScrollView();
                 }
             });
@@ -114,4 +133,15 @@ public class HomeFragment extends BaseFragment {
         return R.layout.fragment_home;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Home.DataBean.ListBean item = (Home.DataBean.ListBean) mAdapter
+                .getItem(position - mLvHome.getHeaderViewsCount());
+        if (item.getType() != 0) {
+            Intent intent = new Intent(mContext, PhotoViewActivity.class);
+            intent.putStringArrayListExtra(PhotoViewActivity.PHOTO_LIST,
+                    (ArrayList<String>) item.getUrl());
+            startActivity(intent);
+        }
+    }
 }

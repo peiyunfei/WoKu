@@ -33,7 +33,7 @@
         <activity android:name=".zxing.app.CaptureActivity"/>
         <activity android:name=".activity.SettingActivity"/>
         <activity android:name=".activity.LoginActivity"/>
-
+        <activity android:name=".activity.PhotoViewActivity"/>
         <service android:name=".service.update.UpdateService"/>
     </application>
 

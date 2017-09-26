@@ -15,11 +15,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.pyf.woku.constant.Constant;
+import com.pyf.wokusdk.activity.AdBrowserActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * fragment基类
@@ -64,9 +63,13 @@ public abstract class BaseFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_QRCODE:
-                if (resultCode == RESULT_OK) {
-                    String scanResult = data.getStringExtra("SCAN_RESULT");
-                    Toast.makeText(mContext, scanResult, Toast.LENGTH_SHORT).show();
+                String code = data.getStringExtra("SCAN_RESULT");
+                if (code.contains("http") || code.contains("https")) {
+                    Intent intent = new Intent(mContext, AdBrowserActivity.class);
+                    intent.putExtra(AdBrowserActivity.KEY_URL, code);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(mContext, code, Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
