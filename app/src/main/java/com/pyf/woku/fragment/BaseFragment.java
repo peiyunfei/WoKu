@@ -14,14 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.pyf.woku.R;
-import com.pyf.woku.bean.Update;
 import com.pyf.woku.constant.Constant;
-import com.pyf.woku.network.http.RequestCenter;
-import com.pyf.woku.service.update.UpdateService;
-import com.pyf.woku.util.Util;
-import com.pyf.woku.view.CommonDialog;
-import com.pyf.wokusdk.okhttp.listener.DisposeDataListener;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -88,62 +81,6 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    /**
-     * 版本更新
-     */
-    protected void checkVersion() {
-        RequestCenter.checkVersion(new DisposeDataListener() {
-            @Override
-            public void onSuccess(Object responseObj) {
-                Update update = (Update) responseObj;
-                if (Util.getVersionCode(mContext) < update.data.currentVersion) {
-                    final CommonDialog dialog = new CommonDialog(mContext,
-                            getString(R.string.update_new_version),
-                            getString(R.string.update_title),
-                            getString(R.string.update_install),
-                            getString(R.string.cancel));
-                    dialog.show();
-                    dialog.setConfirmClickListener(new CommonDialog.DialogConfirmClickListener() {
-                        @Override
-                        public void onConfirmClick() {
-                            if(dialog.isShowing()) {
-                                dialog.dismiss();
-                            }
-                            Intent intent = new Intent(mContext, UpdateService.class);
-                            mContext.startService(intent);
-                        }
-                    });
-                    dialog.setCancelClickListener(new CommonDialog.DialogCancelClickListener() {
-                        @Override
-                        public void onCancelClick() {
-                            if(dialog.isShowing()) {
-                                dialog.dismiss();
-                            }
-                        }
-                    });
-                } else {
-                    final CommonDialog dialog = new CommonDialog(mContext,
-                            getString(R.string.no_new_version_title),
-                            getString(R.string.no_new_version_msg),
-                            getString(R.string.confirm));
-                    dialog.show();
-                    dialog.setConfirmClickListener(new CommonDialog.DialogConfirmClickListener() {
-                        @Override
-                        public void onConfirmClick() {
-                            if(dialog.isShowing()) {
-                                dialog.dismiss();
-                            }
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onFailure(Object reasonObj) {
-                Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     /**
      * 申请指定权限
@@ -189,13 +126,16 @@ public abstract class BaseFragment extends Fragment {
             case Constant.WRITE_READ_EXTERNAL_CODE:
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    checkVersion();
+                    doWriteSdCard();
                 }
                 break;
         }
     }
 
     protected void openCamera() {
+    }
+
+    protected void doWriteSdCard() {
     }
 
     /**

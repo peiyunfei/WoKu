@@ -9,16 +9,24 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pyf.woku.R;
 import com.pyf.woku.R2;
 import com.pyf.woku.activity.LoginActivity;
 import com.pyf.woku.activity.SettingActivity;
+import com.pyf.woku.bean.Update;
 import com.pyf.woku.bean.User;
 import com.pyf.woku.constant.Constant;
 import com.pyf.woku.fragment.BaseFragment;
 import com.pyf.woku.imageloader.ImageLoaderManager;
 import com.pyf.woku.manager.UserManager;
+import com.pyf.woku.network.http.RequestCenter;
+import com.pyf.woku.service.update.UpdateService;
+import com.pyf.woku.util.Util;
+import com.pyf.woku.view.CommonDialog;
+import com.pyf.woku.view.MyQrCodeDialog;
+import com.pyf.wokusdk.okhttp.listener.DisposeDataListener;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -56,6 +64,11 @@ public class MeFragment extends BaseFragment {
         startActivity(intent);
     }
 
+    private void toLogin() {
+        Intent intent = new Intent(mContext, LoginActivity.class);
+        startActivity(intent);
+    }
+
     @OnClick(R2.id.tv_share)
     void onShareClick() {
 
@@ -63,13 +76,19 @@ public class MeFragment extends BaseFragment {
 
     @OnClick(R2.id.tv_my_qtcode)
     void onMyQtcodeClick() {
-
+        if (!UserManager.getInstance().hasLogin()) {
+            toLogin();
+            Toast.makeText(mContext, "请先登录", Toast.LENGTH_SHORT).show();
+        } else {
+            //已登陆根据用户ID生成二维码显示
+            MyQrCodeDialog dialog = new MyQrCodeDialog(mContext);
+            dialog.show();
+        }
     }
 
     @OnClick({R2.id.tv_login, R2.id.rl_login_layout})
     void onLoginClick() {
-        Intent intent = new Intent(mContext, LoginActivity.class);
-        startActivity(intent);
+        toLogin();
     }
 
     @OnClick(R2.id.tv_update)
@@ -82,6 +101,68 @@ public class MeFragment extends BaseFragment {
             requestPermissions(Constant.WRITE_READ_EXTERNAL_CODE,
                     Constant.WRITE_READ_EXTERNAL_PERMISSION);
         }
+    }
+
+    /**
+     * 版本更新
+     */
+    private void checkVersion() {
+        RequestCenter.checkVersion(new DisposeDataListener() {
+            @Override
+            public void onSuccess(Object responseObj) {
+                Update update = (Update) responseObj;
+                if (Util.getVersionCode(mContext) < update.data.currentVersion) {
+                    final CommonDialog dialog = new CommonDialog(mContext,
+                            getString(R.string.update_new_version),
+                            getString(R.string.update_title),
+                            getString(R.string.update_install),
+                            getString(R.string.cancel));
+                    dialog.show();
+                    dialog.setConfirmClickListener(new CommonDialog.DialogConfirmClickListener() {
+                        @Override
+                        public void onConfirmClick() {
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                            Intent intent = new Intent(mContext, UpdateService.class);
+                            mContext.startService(intent);
+                        }
+                    });
+                    dialog.setCancelClickListener(new CommonDialog.DialogCancelClickListener() {
+                        @Override
+                        public void onCancelClick() {
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                } else {
+                    final CommonDialog dialog = new CommonDialog(mContext,
+                            getString(R.string.no_new_version_title),
+                            getString(R.string.no_new_version_msg),
+                            getString(R.string.confirm));
+                    dialog.show();
+                    dialog.setConfirmClickListener(new CommonDialog.DialogConfirmClickListener() {
+                        @Override
+                        public void onConfirmClick() {
+                            if (dialog.isShowing()) {
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Object reasonObj) {
+                Toast.makeText(mContext, "失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    protected void doWriteSdCard() {
+        checkVersion();
     }
 
     @Override
@@ -99,7 +180,7 @@ public class MeFragment extends BaseFragment {
             mTvUsername.setText(user.data.name);
             mTvTick.setText(user.data.tick);
             ImageLoaderManager.getInstance(mContext)
-                    .displayImage(mCivUserAvatar,user.data.photoUrl);
+                    .displayImage(mCivUserAvatar, user.data.photoUrl);
         }
     }
 
@@ -139,7 +220,7 @@ public class MeFragment extends BaseFragment {
                 mTvUsername.setText(user.data.name);
                 mTvTick.setText(user.data.tick);
                 ImageLoaderManager.getInstance(mContext)
-                        .displayImage(mCivUserAvatar,user.data.photoUrl);
+                        .displayImage(mCivUserAvatar, user.data.photoUrl);
             }
         }
     }
