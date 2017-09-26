@@ -2,7 +2,6 @@ package com.pyf.wokusdk.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
 /**
  * 广告WebView页面
@@ -16,7 +15,7 @@ public class AdBrowserActivity extends Activity {
     public static final String KEY_URL = "url";
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 }

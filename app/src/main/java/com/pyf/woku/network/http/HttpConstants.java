@@ -11,6 +11,7 @@ public class HttpConstants {
     private static final String ROOT_URL = "http://192.168.1.228:8080/server";
     public static final String HOME = ROOT_URL + "/home_data.json";
     public static final String UPDATE = ROOT_URL + "/update.json";
+    public static final String LOGIN = ROOT_URL + "/user_info.json";
     /**
      * 请求本地产品列表
      */
@@ -24,7 +25,7 @@ public class HttpConstants {
     /**
      * 登陆接口
      */
-    public static String LOGIN = ROOT_URL + "/user/login_phone.php";
+//    public static String LOGIN = ROOT_URL + "/user/login_phone.php";
 
     /**
      * 检查更新接口

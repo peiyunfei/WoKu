@@ -22,8 +22,10 @@ public class RequestParams {
     }
 
     public RequestParams(Map<String, String> source) {
-        for (Map.Entry<String, String> entry : source.entrySet()) {
-            put(entry.getKey(), entry.getValue());
+        if (source != null) {
+            for (Map.Entry<String, String> entry : source.entrySet()) {
+                put(entry.getKey(), entry.getValue());
+            }
         }
     }
 

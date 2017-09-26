@@ -1,16 +1,24 @@
 package com.pyf.woku.fragment.main;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pyf.woku.R;
 import com.pyf.woku.R2;
+import com.pyf.woku.activity.LoginActivity;
 import com.pyf.woku.activity.SettingActivity;
+import com.pyf.woku.bean.User;
 import com.pyf.woku.constant.Constant;
 import com.pyf.woku.fragment.BaseFragment;
+import com.pyf.woku.imageloader.ImageLoaderManager;
+import com.pyf.woku.manager.UserManager;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -24,6 +32,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 时间：2017/9/16
  */
 public class MeFragment extends BaseFragment {
+
+    private LoginBroadcast mLoginBroadcast;
 
     @BindView(R2.id.civ_avatar)
     CircleImageView mCivAvatar;
@@ -56,6 +66,12 @@ public class MeFragment extends BaseFragment {
 
     }
 
+    @OnClick({R2.id.tv_login, R2.id.rl_login_layout})
+    void onLoginClick() {
+        Intent intent = new Intent(mContext, LoginActivity.class);
+        startActivity(intent);
+    }
+
     @OnClick(R2.id.tv_update)
     void onUpdateClick() {
         // 判断是否有权限
@@ -69,13 +85,62 @@ public class MeFragment extends BaseFragment {
     }
 
     @Override
-    protected void onBindView(Bundle savedInstanceState, View rootView) {
-
-    }
-
-    @Override
     protected Object setLayout() {
         return R.layout.fragment_me;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        User user = UserManager.getInstance().getUser();
+        if (user != null) {
+            mRlLoginLayout.setVisibility(View.GONE);
+            mRlLoaginedLayout.setVisibility(View.VISIBLE);
+            mTvUsername.setText(user.data.name);
+            mTvTick.setText(user.data.tick);
+            ImageLoaderManager.getInstance(mContext)
+                    .displayImage(mCivUserAvatar,user.data.photoUrl);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unRegisterLoginBroadcast();
+    }
+
+    private void unRegisterLoginBroadcast() {
+        if (mLoginBroadcast != null) {
+            LocalBroadcastManager.getInstance(mContext).unregisterReceiver(mLoginBroadcast);
+        }
+    }
+
+    @Override
+    protected void onBindView(Bundle savedInstanceState, View rootView) {
+        registerLoginBroadcast();
+    }
+
+    private void registerLoginBroadcast() {
+        if (mLoginBroadcast == null) {
+            mLoginBroadcast = new LoginBroadcast();
+            IntentFilter filter = new IntentFilter(LoginActivity.LOGIN_ACTION);
+            LocalBroadcastManager.getInstance(mContext).registerReceiver(mLoginBroadcast, filter);
+        }
+    }
+
+    class LoginBroadcast extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            User user = UserManager.getInstance().getUser();
+            if (user != null) {
+                mRlLoginLayout.setVisibility(View.GONE);
+                mRlLoaginedLayout.setVisibility(View.VISIBLE);
+                mTvUsername.setText(user.data.name);
+                mTvTick.setText(user.data.tick);
+                ImageLoaderManager.getInstance(mContext)
+                        .displayImage(mCivUserAvatar,user.data.photoUrl);
+            }
+        }
+    }
 }
