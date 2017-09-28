@@ -11,6 +11,7 @@ import com.pyf.woku.activity.base.BaseActivity;
 import com.pyf.woku.bean.User;
 import com.pyf.woku.manager.UserManager;
 import com.pyf.woku.network.http.RequestCenter;
+import com.pyf.woku.push.PushMessage;
 import com.pyf.woku.view.MailBoxAssociateView;
 import com.pyf.wokusdk.okhttp.listener.DisposeDataListener;
 
@@ -31,6 +32,8 @@ public class LoginActivity extends BaseActivity {
     MailBoxAssociateView mEtEmail;
     @BindView(R2.id.et_password)
     EditText mEtPassword;
+    private boolean mFromPush;
+    private PushMessage mPushMessage;
 
     @OnClick(R2.id.tv_login)
     void onLoginClick() {
@@ -45,6 +48,12 @@ public class LoginActivity extends BaseActivity {
                 sendLocalBroadcast();
                 // 将用户信息保存到数据库，样可以保证用户打开应用后总是登陆状态
                 // 只有用户手动退出登陆时候，将用户数据从数据库中删除。
+                if (mFromPush) {
+                    Intent intent = new Intent(LoginActivity.this, JPushActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("pushMessage", mPushMessage);
+                    startActivity(intent);
+                }
                 finish();
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
             }
@@ -68,6 +77,10 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void initData() {
-
+        Intent intent = getIntent();
+        if (intent != null) {
+            mFromPush = intent.getBooleanExtra("from_push", false);
+            mPushMessage = (PushMessage) intent.getSerializableExtra("pushMessage");
+        }
     }
 }

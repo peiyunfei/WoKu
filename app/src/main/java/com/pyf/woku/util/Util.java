@@ -1,5 +1,6 @@
 package com.pyf.woku.util;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -108,6 +109,24 @@ public class Util {
             tempUrls.add(source.get(i));
         }
         return tempUrls;
+    }
+
+    /**
+     * 这个是真正的获取指定包名的应用程序是否在运行(无论前台还是后台)
+     */
+    public static boolean getCurrentTask(Context context) {
+
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> appProcessInfos = activityManager.getRunningTasks(50);
+        for (ActivityManager.RunningTaskInfo process : appProcessInfos) {
+
+            if (process.baseActivity.getPackageName().equals(context.getPackageName())
+                    || process.topActivity.getPackageName().equals(context.getPackageName())) {
+
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

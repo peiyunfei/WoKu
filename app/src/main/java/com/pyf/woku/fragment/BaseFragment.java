@@ -1,5 +1,6 @@
 package com.pyf.woku.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -63,13 +64,15 @@ public abstract class BaseFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_QRCODE:
-                String code = data.getStringExtra("SCAN_RESULT");
-                if (code.contains("http") || code.contains("https")) {
-                    Intent intent = new Intent(mContext, AdBrowserActivity.class);
-                    intent.putExtra(AdBrowserActivity.KEY_URL, code);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(mContext, code, Toast.LENGTH_SHORT).show();
+                if (resultCode == Activity.RESULT_OK) {
+                    String code = data.getStringExtra("SCAN_RESULT");
+                    if (code.contains("http") || code.contains("https")) {
+                        Intent intent = new Intent(mContext, AdBrowserActivity.class);
+                        intent.putExtra(AdBrowserActivity.KEY_URL, code);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(mContext, code, Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
         }
