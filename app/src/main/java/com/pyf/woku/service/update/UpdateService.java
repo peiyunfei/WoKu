@@ -56,9 +56,9 @@ public class UpdateService extends Service {
     private void startDownload() {
         RequestCenter.downloadFile(APK_URL, mFilePath, new DisposeDownloadListener() {
             @Override
-            public void onProgress(int progrss) {
+            public void onProgress(int progress) {
                 notifyUser(getString(R.string.update_download_processing),
-                        getString(R.string.update_download_processing), progrss);
+                        getString(R.string.update_download_processing), progress);
             }
 
             @Override

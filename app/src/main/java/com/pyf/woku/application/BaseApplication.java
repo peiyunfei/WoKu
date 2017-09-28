@@ -3,6 +3,8 @@ package com.pyf.woku.application;
 import android.app.Application;
 import android.os.Environment;
 
+import com.pyf.woku.share.ShareManager;
+
 /**
  * 应用程序的入口
  * <br/>
@@ -21,7 +23,12 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        initMobSDK();
         initCacheDir();
+    }
+
+    private void initMobSDK() {
+        ShareManager.initMobSDK(this);
     }
 
     /**

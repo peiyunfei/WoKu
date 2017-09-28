@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.pyf.woku.R;
 import com.pyf.woku.R2;
 import com.pyf.woku.activity.base.BaseActivity;
+import com.pyf.woku.constant.Constant;
 import com.pyf.woku.fragment.main.HomeFragment;
 import com.pyf.woku.fragment.main.MeFragment;
 import com.pyf.woku.fragment.main.MessageFragment;
@@ -125,6 +126,18 @@ public class MainActivity extends BaseActivity {
         FragmentTransaction fragmentTransaction = mFm.beginTransaction();
         fragmentTransaction.replace(R.id.fl_container, mHomeFragment);
         fragmentTransaction.commit();
+        checkPermission();
+    }
+
+    private void checkPermission() {
+        if (!hasPermission(Constant.WRITE_READ_EXTERNAL_PERMISSION)) {
+            requestPermissions(Constant.WRITE_READ_EXTERNAL_CODE,
+                    Constant.WRITE_READ_EXTERNAL_PERMISSION);
+        }
+        if (!hasPermission(Constant.HARDWEAR_CAMERA_PERMISSION)) {
+            requestPermissions(Constant.HARDWEAR_CAMERA_CODE,
+                    Constant.HARDWEAR_CAMERA_PERMISSION);
+        }
     }
 
     /**

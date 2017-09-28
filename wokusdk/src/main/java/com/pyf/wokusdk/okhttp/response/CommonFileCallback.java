@@ -75,12 +75,17 @@ public class CommonFileCallback implements Callback {
 
     @Override
     public void onResponse(Call call, Response response) throws IOException {
-        File file = handleResponse(response);
-        if (file == null) {
-            mDisposeDownloadListener.onFailure(new OkHttpException(IO_ERROR, MSG_EMPTY));
-        } else {
-            mDisposeDownloadListener.onSuccess(file);
-        }
+        final File file = handleResponse(response);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (file == null) {
+                    mDisposeDownloadListener.onFailure(new OkHttpException(IO_ERROR, MSG_EMPTY));
+                } else {
+                    mDisposeDownloadListener.onSuccess(file);
+                }
+            }
+        });
     }
 
     private File handleResponse(Response response) {
@@ -91,7 +96,7 @@ public class CommonFileCallback implements Callback {
         FileOutputStream fos = null;
         File file = null;
         int length;
-        int currentLegth = 0;
+        int currentLength = 0;
         long contentLength = response.body().contentLength();
         try {
             checkLocalFilePath();
@@ -101,8 +106,8 @@ public class CommonFileCallback implements Callback {
             byte[] buff = new byte[2048];
             while ((length = in.read(buff)) != -1) {
                 fos.write(buff, 0, length);
-                currentLegth += length;
-                mProgress = (int) (currentLegth * 100 / contentLength);
+                currentLength += length;
+                mProgress = (int) (currentLength * 100 / contentLength);
                 mHandler.obtainMessage(PROGRESS_MESSAGE, mProgress).sendToTarget();
             }
             fos.flush();

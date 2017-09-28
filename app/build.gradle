@@ -13,16 +13,35 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+
+        debug {}
+        //签名打包
+        release {
+            storeFile file("woku.jks")
+            storePassword "123456"
+            keyAlias "woku"
+            keyPassword "123456"
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+        lintConfig file("lint.xml")
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -42,11 +61,11 @@ dependencies {
     // 友盟统计
     compile 'com.umeng.analytics:analytics:latest.integration'
     // 滑动关闭Activity库
-//    compile 'com.r0adkll:slidableactivity:2.0.5'
+    //    compile 'com.r0adkll:slidableactivity:2.0.5'
     // 阿里热修复andfix
-//    compile 'com.alipay.euler:andfix:0.5.0@aar'
+    //    compile 'com.alipay.euler:andfix:0.5.0@aar'
     // 日志库logger
-//    compile 'com.orhanobut:logger:+'
+    //    compile 'com.orhanobut:logger:+'
     // PhotoView
     compile 'com.github.chrisbanes:PhotoView:1.3.0'
     // greendao
@@ -54,4 +73,13 @@ dependencies {
     compile project(':wokusdk')
     compile files('libs/zxing.jar')
     compile files('libs/gson-2.3.1.jar')
+    compile files('libs/MobCommons-2017.0914.1125.jar')
+    compile files('libs/MobTools-2017.0914.1125.jar')
+    compile files('libs/ShareSDK-Core-3.1.0.jar')
+    compile files('libs/ShareSDK-QQ-3.1.0.jar')
+    compile files('libs/ShareSDK-QZone-3.1.0.jar')
+    compile files('libs/ShareSDK-Wechat-3.1.0.jar')
+    compile files('libs/ShareSDK-Wechat-Core-3.1.0.jar')
+    compile files('libs/ShareSDK-Wechat-Favorite-3.1.0.jar')
+    compile files('libs/ShareSDK-Wechat-Moments-3.1.0.jar')
 }

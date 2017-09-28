@@ -35,5 +35,5 @@ public class Constant {
      */
     public static String APP_PHOTO_DIR = Environment.
             getExternalStorageDirectory().getAbsolutePath().
-            concat("/WoKu/download/");
+            concat("/WoKu/photo/");
 }

@@ -5,15 +5,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pyf.woku.R;
+import com.pyf.woku.R2;
 import com.pyf.woku.activity.base.BaseActivity;
 import com.pyf.woku.adapter.PhotoViewAdapter;
 import com.pyf.woku.imageloader.ImageLoaderManager;
+import com.pyf.woku.share.ShareDialog;
 import com.pyf.woku.util.Util;
 import com.pyf.wokusdk.util.Utils;
 
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import cn.sharesdk.framework.Platform;
 
 /**
  * 浏览大图的界面
@@ -24,18 +28,32 @@ import butterknife.BindView;
  */
 public class PhotoViewActivity extends BaseActivity {
 
-    public static final String PHOTO_LIST = "ptoto_list";
+    public static final String PHOTO_LIST = "photo_list";
 
-    @BindView(R.id.tv_indicator)
+    @BindView(R2.id.tv_indicator)
     TextView mTvIndicator;
-    @BindView(R.id.iv_share)
+    @BindView(R2.id.iv_share)
     ImageView mIvShare;
-    @BindView(R.id.vp_photo_view)
+    @BindView(R2.id.vp_photo_view)
     ViewPager mVpPhotoView;
 
     private int mCurPosition;
     private List<String> mPhotos;
     private PhotoViewAdapter mAdapter;
+
+    @OnClick(R2.id.iv_share)
+    void onShareClick() {
+        ShareDialog dialog = new ShareDialog(this, true);
+        dialog.show();
+        dialog.setResourceUrl(mPhotos.get(mCurPosition));
+        dialog.setUrl(mPhotos.get(mCurPosition));
+        dialog.setShareText("分享图片");
+        dialog.setShareTitleUrl("www.imooc.com");
+        dialog.setShareTitle("慕课网");
+        dialog.setShareSite("慕课网");
+        dialog.setShareSiteUrl("www.imooc.com");
+        dialog.setShareType(Platform.SHARE_IMAGE);
+    }
 
     @Override
     protected int initView() {

@@ -12,8 +12,8 @@ public interface DisposeDownloadListener extends DisposeDataListener {
     /**
      * 当下载进度改变时回调
      *
-     * @param progrss
+     * @param progress
      *         下载进度
      */
-    void onProgress(int progrss);
+    void onProgress(int progress);
 }

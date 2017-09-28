@@ -23,6 +23,7 @@ import com.pyf.woku.imageloader.ImageLoaderManager;
 import com.pyf.woku.manager.UserManager;
 import com.pyf.woku.network.http.RequestCenter;
 import com.pyf.woku.service.update.UpdateService;
+import com.pyf.woku.share.ShareDialog;
 import com.pyf.woku.util.Util;
 import com.pyf.woku.view.CommonDialog;
 import com.pyf.woku.view.MyQrCodeDialog;
@@ -30,6 +31,7 @@ import com.pyf.wokusdk.okhttp.listener.DisposeDataListener;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.sharesdk.framework.Platform;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -56,7 +58,7 @@ public class MeFragment extends BaseFragment {
     @BindView(R2.id.tv_tick)
     TextView mTvTick;
     @BindView(R2.id.rl_loagined_layout)
-    RelativeLayout mRlLoaginedLayout;
+    RelativeLayout mRlLoginedLayout;
 
     @OnClick(R2.id.tv_video_setting)
     void onVideoSettingClick() {
@@ -71,7 +73,19 @@ public class MeFragment extends BaseFragment {
 
     @OnClick(R2.id.tv_share)
     void onShareClick() {
-
+        ShareDialog dialog =new ShareDialog(mContext,false);
+        dialog.show();
+        dialog.setResourceUrl("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?" +
+                "image&quality=100&size=b4000_4000&sec=1506579965&di" +
+                "=f193d0c3370027e4261d07557ec84cfa&src=http://cdn2.image.apk.gfan.com" +
+                "/asdf/PImages/2014/5/8/ldpi_705001_2a0b7ee23-e950-41f6-8f40-e90f37bd10de.png");
+        dialog.setUrl("www.imooc.com");
+        dialog.setShareText("分享慕课网");
+        dialog.setShareTitleUrl("www.imooc.com");
+        dialog.setShareTitle("慕课网");
+        dialog.setShareSite("慕课网");
+        dialog.setShareSiteUrl("www.imooc.com");
+        dialog.setShareType(Platform.SHARE_IMAGE);
     }
 
     @OnClick(R2.id.tv_my_qtcode)
@@ -176,7 +190,7 @@ public class MeFragment extends BaseFragment {
         User user = UserManager.getInstance().getUser();
         if (user != null) {
             mRlLoginLayout.setVisibility(View.GONE);
-            mRlLoaginedLayout.setVisibility(View.VISIBLE);
+            mRlLoginedLayout.setVisibility(View.VISIBLE);
             mTvUsername.setText(user.data.name);
             mTvTick.setText(user.data.tick);
             ImageLoaderManager.getInstance(mContext)
@@ -216,7 +230,7 @@ public class MeFragment extends BaseFragment {
             User user = UserManager.getInstance().getUser();
             if (user != null) {
                 mRlLoginLayout.setVisibility(View.GONE);
-                mRlLoaginedLayout.setVisibility(View.VISIBLE);
+                mRlLoginedLayout.setVisibility(View.VISIBLE);
                 mTvUsername.setText(user.data.name);
                 mTvTick.setText(user.data.tick);
                 ImageLoaderManager.getInstance(mContext)
