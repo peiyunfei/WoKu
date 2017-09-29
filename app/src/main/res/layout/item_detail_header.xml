@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_detail_header_logo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/default_user_avatar"/>
+
+        <TextView
+            android:id="@+id/tv_detail_header_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/civ_detail_header_logo"
+            android:layout_toRightOf="@id/civ_detail_header_logo"
+            android:text="狼在北京"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_detail_header_day_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/civ_detail_header_logo"
+            android:layout_toRightOf="@id/civ_detail_header_logo"
+            android:text="3天前"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_detail_header_old_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/civ_detail_header_logo"
+            android:text="￥30.00"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_detail_header_new_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/civ_detail_header_logo"
+            android:layout_alignParentRight="true"
+            android:text="￥15.00"
+            android:textColor="@color/color_cc0000"
+            android:textSize="16sp"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_detail_header_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="在当今的互联网时代，数据是一切应用的核心和基础，有数据的地方就存在安全隐患。在Java领域，我们可以使用Java加密解密技术来提高数据的安全性。本计划从基础入手，为小伙伴们带来了多种Java加解密算法的实现。还等什么，赶快来参加吧！"
+        android:textColor="@color/color_333333"
+        android:textSize="18sp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_detail_header_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_position"
+            android:drawablePadding="5dp"
+            android:text="来自宁波"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_detail_header_danbao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/icon_alipay"
+            android:drawablePadding="5dp"
+            android:text="来自宁波"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_video_view"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/rl_photo_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_e3e3e3"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_detail_header_zan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/icon_position"
+            android:drawablePadding="5dp"
+            android:text="3人点赞"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_detail_header_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/icon_alipay"
+            android:drawablePadding="5dp"
+            android:text="506人浏览"
+            android:textColor="@color/color_333333"
+            android:textSize="16sp"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:background="@color/color_e3e3e3"/>
+
+    <TextView
+        android:id="@+id/tv_detail_header_hot_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="热门留言(7)"
+        android:textColor="@color/color_333333"
+        android:textSize="16sp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_e3e3e3"/>
+</LinearLayout>

@@ -1,4 +1,4 @@
-package com.pyf.woku.view;
+package com.pyf.woku.view.home;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -13,6 +13,7 @@ import com.pyf.woku.R;
 import com.pyf.woku.adapter.PhotoViewAdapter;
 import com.pyf.woku.bean.Home;
 import com.pyf.woku.imageloader.ImageLoaderManager;
+import com.pyf.woku.view.CirclePageIndicator;
 
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 

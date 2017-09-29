@@ -1,5 +1,6 @@
 package com.pyf.woku.network.http;
 
+import com.pyf.woku.bean.CourseDetail;
 import com.pyf.woku.bean.Update;
 import com.pyf.woku.bean.User;
 import com.pyf.wokusdk.okhttp.CommonOkHttpClient;
@@ -26,10 +27,6 @@ public class RequestCenter {
 
     /**
      * 用户登陆请求
-     *
-     * @param listener
-     * @param userName
-     * @param passwd
      */
     public static void login(String userName, String passwd, DisposeDataListener listener) {
 
@@ -39,18 +36,22 @@ public class RequestCenter {
         RequestCenter.postRequest(HttpConstants.LOGIN, params, listener, User.class);
     }
 
+    public static void courseDetail(int courseId, DisposeDataListener listener) {
+        RequestParams params = new RequestParams();
+        params.put("course_id", String.valueOf(courseId));
+        RequestCenter.postRequest(HttpConstants.COURSE_DETAIL, params, listener, CourseDetail.class);
+    }
+
     /**
      * 应用版本号请求
-     *
-     * @param listener
      */
     public static void checkVersion(DisposeDataListener listener) {
         RequestCenter.postRequest(HttpConstants.UPDATE, null, listener, Update.class);
     }
 
-//    public static void requestRecommandData(DisposeDataListener listener) {
-//        RequestCenter.postRequest(HttpConstants.HOME_RECOMMAND, null, listener, BaseRecommandModel.class);
-//    }
+    //    public static void requestRecommandData(DisposeDataListener listener) {
+    //        RequestCenter.postRequest(HttpConstants.HOME_RECOMMAND, null, listener, BaseRecommandModel.class);
+    //    }
 
     public static void downloadFile(String url, String path, DisposeDownloadListener listener) {
         CommonOkHttpClient.downloadFile(CommonRequest.createGetRequest(url, null),

@@ -12,20 +12,19 @@ import android.widget.TextView;
 
 import com.pyf.woku.R;
 import com.pyf.woku.R2;
-import com.pyf.woku.activity.PhotoViewActivity;
+import com.pyf.woku.activity.CourseDetailActivity;
 import com.pyf.woku.adapter.HomeAdapter;
 import com.pyf.woku.bean.Home;
 import com.pyf.woku.constant.Constant;
 import com.pyf.woku.fragment.BaseFragment;
 import com.pyf.woku.network.http.HttpConstants;
-import com.pyf.woku.view.HomeHeaderLayout;
+import com.pyf.woku.view.home.HomeHeaderLayout;
 import com.pyf.woku.zxing.app.CaptureActivity;
 import com.pyf.wokusdk.okhttp.CommonOkHttpClient;
 import com.pyf.wokusdk.okhttp.listener.DisposeDataHandle;
 import com.pyf.wokusdk.okhttp.listener.DisposeDataListener;
 import com.pyf.wokusdk.okhttp.request.CommonRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -135,13 +134,10 @@ public class HomeFragment extends BaseFragment implements AbsListView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Home.DataBean.ListBean item = (Home.DataBean.ListBean) mAdapter
+        Home.DataBean.ListBean bean = (Home.DataBean.ListBean) mAdapter
                 .getItem(position - mLvHome.getHeaderViewsCount());
-        if (item.getType() != 0) {
-            Intent intent = new Intent(mContext, PhotoViewActivity.class);
-            intent.putStringArrayListExtra(PhotoViewActivity.PHOTO_LIST,
-                    (ArrayList<String>) item.getUrl());
-            startActivity(intent);
-        }
+        Intent intent = new Intent(mContext, CourseDetailActivity.class);
+        intent.putExtra("course_id", bean.getCourse_id());
+        startActivity(intent);
     }
 }

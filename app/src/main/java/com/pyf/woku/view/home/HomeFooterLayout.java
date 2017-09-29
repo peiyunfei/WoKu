@@ -1,4 +1,4 @@
-package com.pyf.woku.view;
+package com.pyf.woku.view.home;
 
 import android.content.Context;
 import android.support.annotation.Nullable;

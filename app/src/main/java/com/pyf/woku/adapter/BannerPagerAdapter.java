@@ -1,6 +1,7 @@
 package com.pyf.woku.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pyf.woku.R;
+import com.pyf.woku.activity.PhotoViewActivity;
 import com.pyf.woku.bean.Home;
 import com.pyf.woku.imageloader.ImageLoaderManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,7 +53,7 @@ public class BannerPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        Home.DataBean.ListBean bean = list.get(position % list.size());
+        final Home.DataBean.ListBean bean = list.get(position % list.size());
         // 初始化控件
         View rootView = View.inflate(mContext, R.layout.item_home_view_pager_banner, null);
         TextView tvHomeBannerTitle = (TextView) rootView.findViewById(R.id.tv_home_banner_title);
@@ -71,6 +74,15 @@ public class BannerPagerAdapter extends PagerAdapter {
             mImageLoader.displayImage(images[i], bean.getUrl().get(i));
         }
         container.addView(rootView);
+        rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, PhotoViewActivity.class);
+                intent.putStringArrayListExtra(PhotoViewActivity.PHOTO_LIST,
+                        (ArrayList<String>) bean.getUrl());
+                mContext.startActivity(intent);
+            }
+        });
         return rootView;
     }
 }

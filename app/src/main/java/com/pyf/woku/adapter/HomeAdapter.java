@@ -1,6 +1,7 @@
 package com.pyf.woku.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,14 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.pyf.woku.R;
+import com.pyf.woku.activity.PhotoViewActivity;
 import com.pyf.woku.bean.Home;
 import com.pyf.woku.imageloader.ImageLoaderManager;
 import com.pyf.woku.util.Util;
 import com.pyf.wokusdk.core.video.VideoContext;
 import com.pyf.wokusdk.util.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -96,12 +99,13 @@ public class HomeAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void bindData(int type, ViewHolder holder, Home.DataBean.ListBean listBean) {
+    private void bindData(int type, ViewHolder holder, final Home.DataBean.ListBean listBean) {
         switch (type) {
             case SINGLE_TYPE:
                 bindData(holder, listBean);
                 // 设置单图特有的属性
                 mImageLoader.displayImage(holder.mIvHomePhoto, listBean.getUrl().get(0));
+                setBigImageListener(holder.mIvHomePhoto, listBean);
                 break;
             case MULTIPART_TYPE:
                 bindData(holder, listBean);
@@ -109,6 +113,7 @@ public class HomeAdapter extends BaseAdapter {
                 for (String url : listBean.getUrl()) {
                     holder.mLlHomeMultipart.addView(createImageView(url));
                 }
+                setBigImageListener(holder.mLlHomeMultipart, listBean);
                 break;
             case VIDEO_TYPE:
                 bindData(holder, listBean);
@@ -122,6 +127,20 @@ public class HomeAdapter extends BaseAdapter {
                 holder.mVpHomeBanner.setCurrentItem(data.size() * 100);
                 break;
         }
+    }
+
+    private void setBigImageListener(View v, final Home.DataBean.ListBean listBean) {
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listBean.getType() != 0) {
+                    Intent intent = new Intent(mContext, PhotoViewActivity.class);
+                    intent.putStringArrayListExtra(PhotoViewActivity.PHOTO_LIST,
+                            (ArrayList<String>) listBean.getUrl());
+                    mContext.startActivity(intent);
+                }
+            }
+        });
     }
 
     private View createImageView(String url) {

@@ -12,6 +12,7 @@ public class HttpConstants {
     public static final String HOME = ROOT_URL + "/home_data.json";
     public static final String UPDATE = ROOT_URL + "/update.json";
     public static final String LOGIN = ROOT_URL + "/user_info.json";
+    public static final String COURSE_DETAIL = ROOT_URL + "/course_detail.json";
     /**
      * 请求本地产品列表
      */
